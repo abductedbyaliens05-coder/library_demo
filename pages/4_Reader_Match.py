@@ -26,7 +26,7 @@ shared AS (
     WHERE c1.student_id = ?
     GROUP BY c2.student_id
 )
-SELECT SELECT students.name, students.class,
+SELECT students.name, students.class,
        shared.common,
        ROUND(1.0 * shared.common /
              ((SELECT n FROM counts WHERE student_id = ?) + counts.n - shared.common), 2) AS similarity
