@@ -26,7 +26,7 @@ shared AS (
     WHERE c1.student_id = ?
     GROUP BY c2.student_id
 )
-SELECT students.class,
+SELECT SELECT students.name, students.class,
        shared.common,
        ROUND(1.0 * shared.common /
              ((SELECT n FROM counts WHERE student_id = ?) + counts.n - shared.common), 2) AS similarity
@@ -43,6 +43,6 @@ st.subheader('Closest readers')
 if result.empty:
     st.info('No matches yet. This student needs more checkouts.')
 else:
-    result['reader'] = 'A Class ' + result['class'].astype(str) + ' reader'
+    result['reader'] = result['name'] + ' (Class ' + result['class'].astype(str) + ')'
     result['match'] = (result['similarity'] * 100).round(0).astype(int).astype(str) + '%'
     st.dataframe(result[['reader', 'common', 'match']].rename(columns={'common': 'books in common'}), hide_index=True)
